@@ -1,0 +1,42 @@
+
+{% extends "chart.html" %}
+
+{% block script_content %}
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            {% for key, value in data.items() %}
+                {% if value is string %}
+                    ['{{ key }}', '{{ value }}'],
+                {% else %}
+                    ['{{ key }}', {{ value }}],
+                {% endif %}
+            {% endfor %}
+        ]);
+
+        var options = {
+        title: 'Earthquake Data for range of magnitudes',
+        pieSliceText: 'label',
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+    </script>
+
+{% endblock %}
+
+{% block div_call %}
+<section class="section" style="margin-top:-7%;text-align: center;">
+    <div class="col-xl-6 offset-2" class="col-sm-12" >
+        <div id="piechart" style="width: 80vw; height: 95vh ;"></div>
+    </div>
+</section>
+
+{% endblock %}
+

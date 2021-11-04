@@ -1,0 +1,45 @@
+{% extends "chart.html" %}
+
+{% block script_content %}
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['scatter']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart () {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Magnitude');
+        data.addColumn('number', 'Depth');
+        
+        {% for i in data1 %}
+        data.addRow([ {{i[0]}}, {{i[1]}} ]);
+        {% endfor %}
+        
+        var options = {
+        width: 800,
+        height: 500,
+        chart: {
+            title: 'Data for Magnitude VS Depth',
+            subtitle: 'for Recent 100 Quakes'
+        },
+        hAxis: {title: 'Magnitude'},
+        vAxis: {title: 'Depth'},
+        colors: ['red']
+        };
+
+        var chart = new google.charts.Scatter(document.getElementById('scatterchart_material'));
+
+        chart.draw(data, google.charts.Scatter.convertOptions(options));
+    }
+</script>
+
+{% endblock %}
+
+{% block div_call %}
+<section class="section" style="margin-top:-2%;text-align: center;">
+            <div class="col-xl-6 offset-2" class="col-sm-12" >
+                    <div id="scatterchart_material" style="width: 100vw; height: 95vh ;"></div>
+            </div>
+</section>
+
+{% endblock %}
+

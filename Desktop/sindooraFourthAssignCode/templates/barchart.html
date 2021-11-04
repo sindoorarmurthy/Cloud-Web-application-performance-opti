@@ -1,0 +1,50 @@
+{% extends "chart.html" %}
+
+{% block script_content %}
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawStuff);
+
+    function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+        {% for key, value in data.items() %}
+            {% if value is string %}
+                ['{{ key }}', '{{ value }}'],
+            {% else %}
+                ['{{ key }}', {{ value }}],
+            {% endif %}
+        {% endfor %}
+        ]);
+
+        var options = {
+        title: 'Earthquakes based on magnitude',
+        width: 900,
+        legend: { position: 'none' },
+        chart: { title: 'Earthquakes for range of magnitudes',
+                subtitle: 'popularity by count' },
+        bars: 'vertical', // Required for Material Bar Charts.
+        axes: {
+            x: {
+            0: { side: 'top'} // Top x-axis.
+            }
+        },
+        bar: { groupWidth: "90%" },
+        colors: ['green']
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+        chart.draw(data, options);
+    };
+</script>
+
+{% endblock %}
+
+{% block div_call %}
+<section class="section" style="margin-top:-2%;text-align: center;">
+    <div class="col-xl-6 offset-2" class="col-sm-12" >
+        <div id="top_x_div" style="width: 60vw; height: 60vh ;"></div>
+    </div>
+</section>
+
+{% endblock %}
+
